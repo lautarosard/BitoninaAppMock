@@ -13,10 +13,12 @@ React + TypeScript + Vite + Tailwind CSS v4 (plugin de Vite, sin `tailwind.confi
 ## Arquitectura
 
 - `src/screens/`: una pantalla por archivo (hoy solo `NuevaVenta`, sin router)
-- `src/components/`: piezas reutilizables (`Encabezado`, `Seccion`)
+- `src/components/`: piezas de la pantalla; las clases de los controles están en `estilos.ts`
 - `src/data/mockData.ts`: clientes, productos y primer número de comprobante (71)
-- `src/types.ts`: tipos del dominio (`Cliente`, `Producto`)
+- `src/types.ts`: tipos del dominio (`Cliente`, `Producto`, `ItemPedido`)
 - `src/utils/format.ts`: formato de pesos y fechas en `es-AR`; no formatear a mano
+- `src/utils/search.ts`: búsqueda que ignora tildes y mayúsculas
+- `src/utils/dates.ts`: fechas en hora local; no usar `toISOString()`
 
 Los montos son números enteros en pesos. El estado es local de React (`useState`).
 
@@ -34,5 +36,6 @@ El usuario principal es una persona mayor.
 
 ## Estado actual
 
-Hecho: encabezado con comprobante y fecha, selección de cliente con saldo anterior.
-Pendiente: agregar productos, total, boleta e incremento del número de comprobante.
+Hecho: encabezado, autocompletado de cliente, vencimiento (+14 días), búsqueda de productos
+y alta o baja en el pedido.
+Pendiente: editar cantidades, total, boleta e incremento del número de comprobante.

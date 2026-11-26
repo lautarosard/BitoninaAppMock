@@ -1,71 +1,73 @@
 import { useState } from 'react'
+import BuscadorCliente from '../components/BuscadorCliente'
+import BuscadorProductos from '../components/BuscadorProductos'
+import CampoVencimiento from '../components/CampoVencimiento'
 import Encabezado from '../components/Encabezado'
+import FichaCliente from '../components/FichaCliente'
+import ListaPedido from '../components/ListaPedido'
 import Seccion from '../components/Seccion'
-import { clientes, PRIMER_NUMERO_COMPROBANTE } from '../data/mockData'
-import { formatearPesos } from '../utils/format'
+import { clientes, PRIMER_NUMERO_COMPROBANTE, productos } from '../data/mockData'
+import type { Cliente, ItemPedido, Producto } from '../types'
+import { aValorInput, sumarDias } from '../utils/dates'
+
+const DIAS_DE_VENCIMIENTO = 14
+
+const vencimientoPorDefecto = () => aValorInput(sumarDias(new Date(), DIAS_DE_VENCIMIENTO))
 
 export default function NuevaVenta() {
-  const [clienteId, setClienteId] = useState('')
-  const cliente = clientes.find((c) => c.id === clienteId)
+  const hoy = new Date()
+  const [cliente, setCliente] = useState<Cliente | null>(null)
+  const [vencimiento, setVencimiento] = useState(vencimientoPorDefecto)
+  const [items, setItems] = useState<ItemPedido[]>([])
+
+  function cambiarCliente() {
+    // El pedido se conserva: solo se limpian los datos del cliente.
+    setCliente(null)
+    setVencimiento(vencimientoPorDefecto())
+  }
+
+  function agregarProducto(producto: Producto) {
+    const actual = items.find((i) => i.producto.codigo === producto.codigo)
+    const cantidad = (actual?.cantidad ?? 0) + 1
+    setItems(
+      actual
+        ? items.map((i) => (i === actual ? { producto, cantidad } : i))
+        : [...items, { producto, cantidad }],
+    )
+    return cantidad
+  }
 
   return (
     <>
-      <Encabezado numeroComprobante={PRIMER_NUMERO_COMPROBANTE} fecha={new Date()} />
+      <Encabezado numeroComprobante={PRIMER_NUMERO_COMPROBANTE} fecha={hoy} />
 
       <main className="mx-auto max-w-lg space-y-4 px-4 py-4">
         <Seccion titulo="1. Cliente">
-          <label htmlFor="cliente" className="mb-2 block font-semibold">
-            Elegir cliente
-          </label>
-          <select
-            id="cliente"
-            value={clienteId}
-            onChange={(e) => setClienteId(e.target.value)}
-            className="min-h-14 w-full rounded-lg border-2 border-stone-700 bg-white px-3 focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
-          >
-            <option value="">Seleccione un cliente…</option>
-            {clientes.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nombre}
-              </option>
-            ))}
-          </select>
-
-          {cliente && (
-            <dl className="mt-4 space-y-2">
-              <div>
-                <dt className="font-semibold">Teléfono</dt>
-                <dd>{cliente.telefono}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold">Correo electrónico</dt>
-                <dd className="break-all">{cliente.email}</dd>
-              </div>
-              <div
-                className={`rounded-lg border-2 p-3 ${
-                  cliente.saldoAnterior > 0
-                    ? 'border-amber-800 bg-amber-100'
-                    : 'border-emerald-800 bg-emerald-100'
-                }`}
-              >
-                <dt className="font-semibold">Saldo anterior</dt>
-                <dd>
-                  <span className="block text-2xl font-bold">
-                    {formatearPesos(cliente.saldoAnterior)}
-                  </span>
-                  {cliente.saldoAnterior > 0 ? 'Tiene deuda pendiente' : 'Está al día'}
-                </dd>
-              </div>
-            </dl>
+          {cliente ? (
+            <FichaCliente cliente={cliente} onCambiar={cambiarCliente} />
+          ) : (
+            <BuscadorCliente clientes={clientes} onElegir={setCliente} />
           )}
+          <CampoVencimiento
+            valor={vencimiento}
+            minimo={aValorInput(hoy)}
+            onCambiar={setVencimiento}
+          />
         </Seccion>
 
-        <Seccion titulo="2. Productos">
-          <p>Todavía no se pueden agregar productos. Es el próximo paso del prototipo.</p>
+        <Seccion titulo="2. Agregar Productos">
+          <BuscadorProductos productos={productos} onAgregar={agregarProducto} />
         </Seccion>
 
-        <Seccion titulo="3. Total y boleta">
-          <p>El total y la boleta se mostrarán aquí cuando la venta tenga productos.</p>
+        <Seccion titulo="3. Pedido">
+          <ListaPedido
+            items={items}
+            onQuitar={(codigo) => setItems(items.filter((i) => i.producto.codigo !== codigo))}
+          />
+        </Seccion>
+
+        <Seccion titulo="4. Total y boleta">
+          <p>El total y la boleta son el próximo paso del prototipo.</p>
         </Seccion>
       </main>
     </>

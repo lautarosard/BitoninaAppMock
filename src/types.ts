@@ -13,3 +13,8 @@ export interface Producto {
   /** Precio unitario en pesos. */
   precio: number
 }
+
+export interface ItemPedido {
+  producto: Producto
+  cantidad: number
+}
