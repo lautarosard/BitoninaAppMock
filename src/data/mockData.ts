@@ -1,6 +1,14 @@
-import type { Cliente, Producto } from '../types'
+import type { Cliente, Distribuidora, Producto } from '../types'
 
 export const PRIMER_NUMERO_COMPROBANTE = 71
+
+// Datos de ejemplo: reemplazar por los reales de la distribuidora.
+export const distribuidora: Distribuidora = {
+  nombre: 'Distribuidora de Dietética (ejemplo)',
+  direccion: 'Calle de Ejemplo 123, Buenos Aires',
+  telefono: '11 0000-0000',
+  email: 'ventas@distribuidora.example.com',
+}
 
 export const clientes: Cliente[] = [
   {

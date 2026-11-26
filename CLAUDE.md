@@ -12,10 +12,12 @@ React + TypeScript + Vite + Tailwind CSS v4 (plugin de Vite, sin `tailwind.confi
 
 ## Arquitectura
 
-- `src/screens/`: una pantalla por archivo (hoy solo `NuevaVenta`, sin router)
+- `src/screens/`: una pantalla por archivo (`NuevaVenta`, `VistaBoleta`); `App.tsx` cambia entre ellas, sin router
+- `src/utils/boleta.ts`: cálculos de importes (única fuente de las fórmulas)
+- `src/utils/storage.ts`: boletas en `localStorage`; el número siguiente se deduce de lo guardado
 - `src/components/`: piezas de la pantalla; las clases de los controles están en `estilos.ts`
 - `src/data/mockData.ts`: clientes, productos y primer número de comprobante (71)
-- `src/types.ts`: tipos del dominio (`Cliente`, `Producto`, `ItemPedido`)
+- `src/types.ts`: tipos del dominio (`Cliente`, `Producto`, `ItemPedido`, `Boleta`, `Distribuidora`)
 - `src/utils/format.ts`: formato de pesos y fechas en `es-AR`; no formatear a mano
 - `src/utils/search.ts`: búsqueda que ignora tildes y mayúsculas
 - `src/utils/dates.ts`: fechas en hora local; no usar `toISOString()`
@@ -34,8 +36,13 @@ El usuario principal es una persona mayor.
 - Mobile-first, una sola columna (`mx-auto max-w-lg`). Sin barras laterales ni menús complejos.
 - No bloquear el zoom en el `viewport`.
 
+## Términos de la cuenta corriente (obligatorios)
+
+"Subtotal compra actual", "Saldo anterior", "Entrega a cuenta" y "Saldo restante".
+Nunca usar "saldo adeudado". Saldo restante = Subtotal + Saldo anterior − Entrega a cuenta.
+
 ## Estado actual
 
-Hecho: encabezado, autocompletado de cliente, vencimiento (+14 días), búsqueda de productos
-y alta o baja en el pedido.
-Pendiente: editar cantidades, total, boleta e incremento del número de comprobante.
+Hecho: flujo completo de venta (cliente, productos, cantidades, total, boleta y guardado).
+Pendiente: datos reales de la distribuidora, historial de boletas, imprimir o compartir,
+y trasladar el saldo restante a la próxima venta del cliente.
