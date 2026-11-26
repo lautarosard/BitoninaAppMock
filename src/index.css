@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Base de 18px en rem: respeta el tamaño de letra configurado en el teléfono. */
+body {
+  @apply bg-stone-100 text-lg text-stone-950 antialiased;
+}

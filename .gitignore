@@ -1,0 +1,45 @@
+# --- Dependencias y cachés de gestores de paquetes ---
+node_modules/
+.pnpm-store/
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Compilación, build y cachés de herramientas ---
+dist/
+dist-ssr/
+build/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# --- Variables de entorno y secretos ---
+# Se ignoran todos los .env (incluye .env.local y .env.*.local).
+# Solo se versiona la plantilla sin valores reales.
+.env
+.env.*
+!.env.example
+*.pem
+
+# --- Despliegue (Vercel) ---
+.vercel/
+
+# --- Editores e IDEs ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Configuración local de Claude Code ---
+.claude/settings.local.json
+
+# --- Sistema operativo ---
+.DS_Store
+Thumbs.db
+Desktop.ini
