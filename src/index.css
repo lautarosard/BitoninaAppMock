@@ -4,3 +4,22 @@
 body {
   @apply bg-stone-100 text-lg text-stone-950 antialiased;
 }
+
+/* Impresión de la boleta. Lo que no va en papel se oculta con la clase print:hidden. */
+@page {
+  size: A4;
+  margin: 15mm;
+}
+
+@media print {
+  /* Todas las medidas están en rem: esto reduce la hoja entera a un tamaño de papel. */
+  html {
+    font-size: 12px;
+  }
+
+  body {
+    background: white;
+    /* Conserva líneas y fondos aunque el navegador omita colores al imprimir. */
+    print-color-adjust: exact;
+  }
+}

@@ -8,7 +8,16 @@ en una distribuidora de dietética. Sin backend: los datos son estáticos.
 React + TypeScript + Vite + Tailwind CSS v4 (plugin de Vite, sin `tailwind.config`). Usar **pnpm**.
 
 - `pnpm dev`: servidor de desarrollo
-- `pnpm build`: chequeo de tipos y build de producción
+- `pnpm lint`: ESLint, sin tolerar advertencias
+- `pnpm build`: lint, chequeo de tipos y build de producción (lo mismo que corre Vercel)
+
+TypeScript queda fijado en 6.0: `typescript-eslint` todavía no admite la versión 7.
+
+## Impresión y despliegue
+
+- La boleta se imprime en A4: marcar con `print:hidden` todo lo que no vaya en papel.
+- `src/utils/resumen.ts` arma el texto para WhatsApp.
+- `vercel.json` redirige cualquier ruta a `index.html`.
 
 ## Arquitectura
 
@@ -43,6 +52,7 @@ Nunca usar "saldo adeudado". Saldo restante = Subtotal + Saldo anterior − Entr
 
 ## Estado actual
 
-Hecho: flujo completo de venta (cliente, productos, cantidades, total, boleta y guardado).
-Pendiente: datos reales de la distribuidora, historial de boletas, imprimir o compartir,
-y trasladar el saldo restante a la próxima venta del cliente.
+Hecho: flujo completo de venta (cliente, productos, cantidades, total, boleta y guardado),
+impresión o PDF y resumen para WhatsApp.
+Pendiente: datos reales de la distribuidora, historial de boletas y trasladar el saldo
+restante a la próxima venta del cliente.

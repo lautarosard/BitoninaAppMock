@@ -1,5 +1,6 @@
+import AccionesBoleta from '../components/AccionesBoleta'
 import CampoMonto from '../components/CampoMonto'
-import { botonPrincipal } from '../components/estilos'
+import { botonSecundario } from '../components/estilos'
 import { distribuidora } from '../data/mockData'
 import type { Boleta } from '../types'
 import { saldoRestante, subtotalCompra, subtotalLinea } from '../utils/boleta'
@@ -20,10 +21,10 @@ export default function VistaBoleta({ boleta, guardada, onCambiar, onNuevaVenta 
   const restante = saldoRestante(boleta)
 
   return (
-    <main className="mx-auto max-w-lg space-y-4 px-4 py-4">
+    <main className="mx-auto max-w-lg space-y-4 px-4 py-4 print:max-w-none print:p-0">
       <p
         role="status"
-        className={`rounded-lg border-2 p-3 font-bold ${
+        className={`rounded-lg border-2 p-3 font-bold print:hidden ${
           guardada ? 'border-emerald-800 bg-emerald-100' : 'border-red-800 bg-red-100'
         }`}
       >
@@ -32,7 +33,7 @@ export default function VistaBoleta({ boleta, guardada, onCambiar, onNuevaVenta 
           : 'Atención: no se pudo guardar la boleta en este dispositivo. Anotá los datos.'}
       </p>
 
-      <article className="rounded-xl border-2 border-stone-500 bg-white p-4">
+      <article className="rounded-xl border-2 border-stone-500 bg-white p-4 print:rounded-none print:border-0 print:p-0">
         <header className="border-b-4 border-stone-900 pb-3">
           <p className="text-xl font-bold">{distribuidora.nombre}</p>
           <p>{distribuidora.direccion}</p>
@@ -76,7 +77,10 @@ export default function VistaBoleta({ boleta, guardada, onCambiar, onNuevaVenta 
             </tr>
           </thead>
           {items.map((item) => (
-            <tbody key={item.producto.codigo} className="border-b border-stone-400">
+            <tbody
+              key={item.producto.codigo}
+              className="border-b border-stone-400 print:break-inside-avoid"
+            >
               <tr>
                 <th scope="rowgroup" colSpan={3} className="pt-2 text-left">
                   {item.producto.nombre}
@@ -93,7 +97,10 @@ export default function VistaBoleta({ boleta, guardada, onCambiar, onNuevaVenta 
           ))}
         </table>
 
-        <section aria-labelledby="titulo-cuenta" className="mt-4 border-t-4 border-stone-900 pt-3">
+        <section
+          aria-labelledby="titulo-cuenta"
+          className="mt-4 border-t-4 border-stone-900 pt-3 print:break-inside-avoid"
+        >
           <h2 id="titulo-cuenta" className="mb-3 text-2xl font-bold">
             Cuenta corriente
           </h2>
@@ -127,7 +134,13 @@ export default function VistaBoleta({ boleta, guardada, onCambiar, onNuevaVenta 
         </section>
       </article>
 
-      <button type="button" onClick={onNuevaVenta} className={botonPrincipal}>
+      <AccionesBoleta boleta={boleta} />
+
+      <button
+        type="button"
+        onClick={onNuevaVenta}
+        className={`${botonSecundario} min-h-14 w-full text-xl print:hidden`}
+      >
         Nueva Venta
       </button>
     </main>

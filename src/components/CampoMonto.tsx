@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { formatearNumero } from '../utils/format'
+import { formatearNumero, formatearPesos } from '../utils/format'
 import { campo } from './estilos'
 
 interface Props {
@@ -15,11 +15,13 @@ export default function CampoMonto({ etiqueta, valor, onCambiar }: Props) {
   const id = useId()
 
   return (
-    <div>
+    <div className="print:flex print:justify-between">
       <label htmlFor={id} className="mb-1 block font-semibold">
         {etiqueta}
       </label>
-      <div className="flex items-center gap-2">
+      {/* En papel se muestra el importe como texto, no como un campo para completar. */}
+      <span className="hidden font-bold print:block">{formatearPesos(valor)}</span>
+      <div className="flex items-center gap-2 print:hidden">
         <span aria-hidden="true" className="text-3xl font-bold">
           $
         </span>
